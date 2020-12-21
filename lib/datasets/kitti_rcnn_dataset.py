@@ -296,7 +296,9 @@ class KittiRCNNDataset(KittiDataset):
             else:
                 choice = np.arange(0, len(pts_rect), dtype=np.int32)
                 if self.npoints > len(pts_rect):
-                    extra_choice = np.random.choice(choice, self.npoints - len(pts_rect), replace=False)
+                    # File "mtrand.pyx", line 954, in numpy.random.mtrand.RandomState.choice
+                    # ValueError: Cannot take a larger sample than population when 'replace=False'
+                    extra_choice = np.random.choice(choice, self.npoints - len(pts_rect), replace=True)
                     choice = np.concatenate((choice, extra_choice), axis=0)
                 np.random.shuffle(choice)
 
